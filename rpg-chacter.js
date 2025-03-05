@@ -5,6 +5,7 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
+import "@haxtheweb/rpg-character";
 
 /**
  * `rpg-chacter`
@@ -17,14 +18,25 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
   static get tag() {
     return "rpg-chacter";
   }
+  static properties = {
+    organiztion: { type: String },
+    repo: { type: String },
+    limit: { type: Number },
+    contributors: { type: Array },
+  };
 
   constructor() {
     super();
+    this.organization = "haxtheweb";
+    this.repo = "webcomponents";
+    this.limit = 10;
+    this.contributors = [];
     this.title = "";
     this.t = this.t || {};
     this.t = {
       ...this.t,
       title: "Title",
+    
     };
     this.registerLocalization({
       context: this,
@@ -33,6 +45,10 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
         "/../",
       locales: ["ar", "es", "hi", "zh"],
     });
+  }
+
+  firstUpdated() {
+    this.fetchContributors();
   }
 
   // Lit reactive properties
@@ -66,10 +82,12 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
   // Lit render the HTML
   render() {
     return html`
-<div class="wrapper">
-  <h3><span>${this.t.title}:</span> ${this.title}</h3>
-  <slot></slot>
-</div>`;
+<div>
+  <a class="repo-link" href="https://github.com/${this.organization}/${this.repo}" target="_blank">
+    ${this.organization}/${this.repo}
+  </a>
+</div>
+<github-rpg-contributors organization="haxtheweb" repo="webcomponents" limit="10"></github-rpg-contributors>`;
   }
 
   /**
