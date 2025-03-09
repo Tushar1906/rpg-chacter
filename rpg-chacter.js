@@ -48,8 +48,23 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
   }
 
   firstUpdated() {
-    this.fetchContributors();
+    this.getData();
   }
+  async getData() {
+    const url = " https://api.github.com/repos/haxtheweb/webcomponents/contributors";
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+  
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+  
 
   // Lit reactive properties
   static get properties() {
@@ -65,6 +80,7 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
     css`
       :host {
         display: block;
+        padding: 16px;
         color: var(--ddd-theme-primary);
         background-color: var(--ddd-theme-accent);
         font-family: var(--ddd-font-navigation);
@@ -86,6 +102,16 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
   <a class="repo-link" href="https://github.com/${this.organization}/${this.repo}" target="_blank">
     ${this.organization}/${this.repo}
   </a>
+</div class="new-container">
+${this.contributors.map(contributor => html`
+<div class="container">
+  <rpg-character name="${contributor.login}"></rpg-character>
+  <a href="${contributor.html_url}" target="_blank">${contributor.login}</a>
+  Contributions: ${contributor.contributions}
+</div>
+
+`)}
+</div>
 </div>
 <github-rpg-contributors organization="haxtheweb" repo="webcomponents" limit="10"></github-rpg-contributors>`;
   }
