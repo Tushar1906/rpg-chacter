@@ -5,7 +5,7 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
-import "@haxtheweb/rpg-character";
+import '@haxtheweb/rpg-character/rpg-character.js';
 
 /**
  * `rpg-chacter`
@@ -51,7 +51,7 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
     this.getData();
   }
   async getData() {
-    const url = " https://api.github.com/repos/haxtheweb/webcomponents/contributors";
+    const url = `https://api.github.com/repos/${this.organization}/${this.repo}/contributors`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -92,6 +92,22 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
       h3 span {
         font-size: var(--rpg-chacter-label-font-size, var(--ddd-font-size-s));
       }
+      .repo-link {
+        font-size: var(--rpg-chacter-repo-link-font-size, var(--ddd-font-size-m));
+        color: var(--rpg-chacter-repo-link-color, var(--ddd-theme-primary));
+        text-decoration: none;
+      }
+      .new-container {
+        display: flex;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        margin: 8px;
+      }
+      rpg-chacter {
+        cursor: pointer;
+      }
     `];
   }
 
@@ -105,7 +121,7 @@ export class RpgChacter extends DDDSuper(I18NMixin(LitElement)) {
 </div class="new-container">
 ${this.contributors.map(contributor => html`
 <div class="container">
-  <rpg-character name="${contributor.login}"></rpg-character>
+  <rpg-chacter name="${contributor.login}"></rpg-chacter>
   <a href="${contributor.html_url}" target="_blank">${contributor.login}</a>
   Contributions: ${contributor.contributions}
 </div>
